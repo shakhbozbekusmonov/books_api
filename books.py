@@ -4,15 +4,39 @@ app = FastAPI()
 
 
 BOOKS = [
-    {"title": "FastAPI Book", "author": "Tanner Linsley", "price": 39.99},
-    {"title": "FastAPI Book 2", "author": "Tanner Linsley", "price": 49.99},
-    {"title": "FastAPI Book 3", "author": "Tanner Linsley", "price": 59.99},
-    {"title": "FastAPI Book 4", "author": "Tanner Linsley", "price": 69.99},
-    {"title": "FastAPI Book 5", "author": "Tanner Linsley", "price": 79.99},
-    {"title": "FastAPI Book 6", "author": "Tanner Linsley", "price": 89.99},
+    {
+        "title": "FastAPI Book",
+        "slug": "fastapi-book",
+        "category": "Python",
+        "author": "Tanner Linsley",
+        "price": 39.99
+    },
+    {
+        "title": "Go Book",
+        "slug": "go-book",
+        "category": "Golang",
+        "author": "Tanner Linsley",
+        "price": 49.99
+    },
+    {
+        "title": "Java Book",
+        "slug": "java-book",
+        "category": "Java",
+        "author": "Tanner Linsley",
+        "price": 59.99
+    },
 ]
 
 
-@app.get("/books")
-async def read_all_books():
+@app.get("/books/")
+async def read_all_books(category: str):
+    if category:
+        return [book for book in BOOKS if book["category"].lower() == category.lower()]
     return BOOKS
+
+
+@app.get("/books/{slug}")
+async def read_book_by_slug(slug: str):
+    for book in BOOKS:
+        if book["slug"] == slug:
+            return book
